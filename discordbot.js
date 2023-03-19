@@ -8,6 +8,7 @@ const client = new Client({
 const Enmap = require("enmap");
 const serverEnmap = new Enmap({name: "servers"});
 const os = require("os");
+const repl = require("repl");
 
 const returnServers = async () => {
     console.log("retreiving current servers")
@@ -35,7 +36,6 @@ const getClanPlayers = clanTag => {
 const writeOnlinePlayersMessage = clanTag => {
     console.log("writing for clantag: " + clanTag);
 
-    let clanPlayers = [];
     let replyMessage = "```The following players are online:";
 
     const servers = serverEnmap.get("servers");
@@ -45,7 +45,8 @@ const writeOnlinePlayersMessage = clanTag => {
             server.players.forEach(player => {
                 if (player.name.includes(clanTag)) {
                     if(serverNameListed==false){
-                        replyMessage+="\n"+server.properties.hostname.slice(server.properties.hostname.indexOf("]") + 1)+":"
+                        replyMessage+="\n"+server.properties.hostname.slice(server.properties.hostname.indexOf("]") + 1)
+                        replyMessage+=", map: " + server.properties.mapname +", "+ server.properties.numplayers + "/" + server.properties.maxplayers;
                         serverNameListed=true
                     }
                     replyMessage+="\n     "+player.name
@@ -101,8 +102,6 @@ client.on("ready", async () => {
         console.log(err);
     }
 
-    console.log(os.uptime());
-
     setInterval(async () => {
         try {
             await returnServers().then(servers => {
@@ -116,7 +115,7 @@ client.on("ready", async () => {
                         if (getClanPlayers(serverProperties.clanTag).length > serverProperties.onlineClanMatesThreshold) {
                             console.log("There are more online players than the threshold for: " + serverProperties.serverId);
                             serverProperties.onlineClanMatesAlertTime = os.uptime() + config.onlineClanMatesAlertTime;
-                            client.channels.cache.get(serverProperties.channelId).send("@everyone" + writeOnlinePlayersMessage(serverProperties.clanTag));
+                            client.channels.cache.get(serverProperties.channelId).send(writeOnlinePlayersMessage(serverProperties.clanTag));
                         } else {
                             console.log("There are less online players than the threshold for; " + serverProperties.serverId);
                             serverProperties.onlineClanMatesAlertTime = os.uptime();
@@ -152,7 +151,7 @@ client.on("messageCreate", async message => {
                     serverProperties.push({
                         serverId: message.guildId,
                         channelId: message.channelId,
-                        clanTag: "clanTag",
+                        clanTag: config.defaultClanTag,
                         onlineClanMatesThreshold: config.onlineClanMatesThreshold,
                         onlineClanMatesAlertTime: 0,
                     });
@@ -162,7 +161,7 @@ client.on("messageCreate", async message => {
                         serverEnmap.push("serverProperties", {
                             serverId: message.guildId,
                             channelId: message.channelId,
-                            clanTag: "clanTag",
+                            clanTag: config.defaultClanTag,
                             onlineClanMatesThreshold: config.onlineClanMatesThreshold,
                             onlineClanMatesAlertTime: 0,
                         });
@@ -217,7 +216,7 @@ client.on("messageCreate", async message => {
                 serverProperties.push({
                     serverId: message.guildId,
                     channelId: message.channelId,
-                    clanTag: "clanTag",
+                    clanTag: config.defaultClanTag,
                     onlineClanMatesThreshold: message.content.split(" ")[1],
                     onlineClanMatesAlertTime: 0,
                 });
@@ -227,7 +226,7 @@ client.on("messageCreate", async message => {
                     serverEnmap.push("serverProperties", {
                         serverId: message.guildId,
                         channelId: message.channelId,
-                        clanTag: "clanTag",
+                        clanTag: config.defaultClanTag,
                         onlineClanMatesThreshold: message.content.split(" ")[1],
                         onlineClanMatesAlertTime: 0,
                     });
