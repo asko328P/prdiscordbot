@@ -10,6 +10,7 @@ const serverEnmap = new Enmap({name: "servers"});
 const os = require("os");
 
 const returnServers = async () => {
+    console.log("retreiving current servers")
     const request = await axios.get("https://servers.realitymod.com/api/ServerInfo");
     return request.data.servers;
 };
@@ -23,7 +24,7 @@ const getClanPlayers = clanTag => {
         if (server.properties.numplayers != "0") {
             server.players.forEach(player => {
                 if (player.name.includes(clanTag)) {
-                    clanPlayers.push(player.name + " " + server.properties.hostname.slice(server.properties.hostname.indexOf("]") + 1));
+                    clanPlayers.push({name: player.name, server: server.properties.hostname.slice(server.properties.hostname.indexOf("]") + 1)});
                 }
             });
         }
@@ -31,13 +32,31 @@ const getClanPlayers = clanTag => {
     return clanPlayers;
 };
 
-const writeOnlinePlayersMessage = players => {
-    let replyMessage = "```The following players are online: ";
-    players.forEach(player => {
-        replyMessage += "\n" + player;
+const writeOnlinePlayersMessage = clanTag => {
+    console.log("writing for clantag: " + clanTag);
+
+    let clanPlayers = [];
+    let replyMessage = "```The following players are online:";
+
+    const servers = serverEnmap.get("servers");
+    servers.forEach(server => {
+        if (server.properties.numplayers != "0") {
+            let serverNameListed=false
+            server.players.forEach(player => {
+                if (player.name.includes(clanTag)) {
+                    if(serverNameListed==false){
+                        replyMessage+="\n"+server.properties.hostname.slice(server.properties.hostname.indexOf("]") + 1)+":"
+                        serverNameListed=true
+                    }
+                    replyMessage+="\n     "+player.name
+                }
+            });
+        }
     });
+
     replyMessage = replyMessage.substring(0, 1900);
     replyMessage += "```";
+
     return replyMessage;
 };
 
@@ -97,7 +116,7 @@ client.on("ready", async () => {
                         if (getClanPlayers(serverProperties.clanTag).length > serverProperties.onlineClanMatesThreshold) {
                             console.log("There are more online players than the threshold for: " + serverProperties.serverId);
                             serverProperties.onlineClanMatesAlertTime = os.uptime() + config.onlineClanMatesAlertTime;
-                            client.channels.cache.get(serverProperties.channelId).send("@everyone" + writeOnlinePlayersMessage(getClanPlayers(serverProperties.clanTag)));
+                            client.channels.cache.get(serverProperties.channelId).send("@everyone" + writeOnlinePlayersMessage(serverProperties.clanTag));
                         } else {
                             console.log("There are less online players than the threshold for; " + serverProperties.serverId);
                             serverProperties.onlineClanMatesAlertTime = os.uptime();
@@ -122,8 +141,7 @@ client.on("messageCreate", async message => {
 
             case "clan":
                 let clanTag = getClanTagFromServerId(message.guildId) + " ";
-                const players = getClanPlayers(clanTag);
-                message.reply(writeOnlinePlayersMessage(players));
+                message.reply(writeOnlinePlayersMessage(clanTag));
                 break;
 
             case "prbotsetchannel":
