@@ -8,7 +8,6 @@ const client = new Client({
 const Enmap = require("enmap");
 const serverEnmap = new Enmap({name: "servers"});
 const os = require("os");
-const repl = require("repl");
 
 const returnServers = async () => {
     console.log("retreiving current servers")

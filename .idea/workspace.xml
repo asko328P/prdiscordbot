@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13874cae-ab4a-4fc1-a954-e6b63d59ebde" name="Changes" comment="First commit">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/prdiscordbot.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/enmap.sqlite" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/enmap.sqlite-shm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/enmap.sqlite-wal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/enmap.sqlite-shm" beforeDir="false" afterPath="$PROJECT_DIR$/data/enmap.sqlite-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discordbot.js" beforeDir="false" afterPath="$PROJECT_DIR$/discordbot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +47,7 @@
     "WebServerToolWindowFactoryState": "false",
     "javascript.nodejs.core.library.configured.version": "18.12.1",
     "javascript.nodejs.core.library.typings.version": "18.15.3",
+    "last_opened_file_path": "/home/asko/githubRepos/PRbot",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -76,7 +71,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1679166839808</updated>
-      <workItem from="1679166840939" duration="8962000" />
+      <workItem from="1679166840939" duration="9428000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1679181579476</created>
